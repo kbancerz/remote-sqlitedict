@@ -11,8 +11,8 @@ def get_sqlitedict(host, port, db_name, autocommit=False):
     return c.root.get_sqlitedict(db_name, autocommit=autocommit)
 
 
-def get_service(db_root):
-
+def start_server(port, db_root):
+    # define new service with DB_ROOT set based on the parameter
     class SQLiteDictService(rpyc.Service):
 
         DB_ROOT = db_root
@@ -30,12 +30,8 @@ def get_service(db_root):
             if self._instance is not None:
                 self._instance.close()
 
-    return SQLiteDictService
-
-
-def start_server(port, db_root):
     ThreadedServer(
-        get_service(db_root), port=port,
+        SQLiteDictService, port=port,
         protocol_config={
             "allow_public_attrs": True,
             "allow_all_attrs": True
