@@ -1,0 +1,14 @@
+version: '2'
+
+services:
+  remote_sqlitedict:
+    build: .
+    read_only: yes
+    container_name: remote_sqlitedict
+    environment:
+      - REMOTE_SQLITEDICT_PORT=18753
+      - REMOTE_SQLITEDICT_DB_ROOT=/data
+    ports:
+      - 18753:18753
+    volumes:
+      - ./data:/data
