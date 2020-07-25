@@ -6,6 +6,9 @@ from rpyc.utils.server import ThreadedServer
 from sqlitedict import SqliteDict
 
 
+DEF_PORT = 18753
+
+
 def get_sqlitedict(host, port, db_name, autocommit=False):
     c = rpyc.connect(host, port)
     return c.root.get_sqlitedict(db_name, autocommit=autocommit)
@@ -47,9 +50,9 @@ if __name__ == '__main__':
                         help='Specify alternative directory '
                              '[default:current directory]')
     parser.add_argument('port', action='store',
-                        default=18753, type=int,
+                        default=DEF_PORT, type=int,
                         nargs='?',
-                        help='Specify alternate port [default: 18753]')
+                        help=f'Specify alternate port [default: {DEF_PORT}]')
     args = parser.parse_args()
 
     print(f'Server starting on port {args.port}...')
