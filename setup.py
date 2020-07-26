@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "remote-sqlitedict"
-VERSION = "0.2.0"
+VERSION = "0.3.0"
 # To install the library, run the following
 #
 # python setup.py install
@@ -24,7 +24,7 @@ setup(
     url="",
     keywords=["sqlitedict", "rpyc", "remote"],
     install_requires=REQUIRES,
-    packages=find_packages(),
+    py_modules=['remote_sqlitedict'],
     include_package_data=True,
     long_description="""\
     This package allows for a remote access to SQLite backed dictionary for data persistence   # noqa: E501
