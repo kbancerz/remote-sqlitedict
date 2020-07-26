@@ -12,7 +12,8 @@ DEF_PORT = 18753
 
 def get_sqlitedict(host, port, db_name, autocommit=False):
     c = rpyc.connect(host, port)
-    return c.root.get_sqlitedict(db_name, autocommit=autocommit)
+    return c.root.get_sqlitedict(
+        db_name, autocommit=autocommit, config={"allow_public_attrs": True})
 
 
 def start_server(port, db_root):
@@ -38,8 +39,7 @@ def start_server(port, db_root):
     ThreadedServer(
         SQLiteDictService, port=port,
         protocol_config={
-            "allow_public_attrs": True,
-            "allow_all_attrs": True
+            "allow_public_attrs": True
         }
     ).start()
 
