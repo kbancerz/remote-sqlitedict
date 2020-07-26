@@ -1,6 +1,5 @@
 import json
 import os
-import pickle
 import sys
 
 import rpyc
@@ -8,17 +7,10 @@ from rpyc.utils.server import ThreadedServer
 from sqlitedict import SqliteDict
 
 
-def pickle_dump(obj):
-    return pickle.dumps(obj, protocol=pickle.HIGHEST_PROTOCOL)
-
-
-def pickle_load(data):
-    return pickle.loads(data)
-
-
-# monkey-patch pickle in place of brine
-rpyc.core.brine.dump = pickle_dump
-rpyc.core.brine.load = pickle_load
+# prevent JSON serialization issues by specifying and encoder
+# see: https://github.com/tomerfiliba/rpyc/issues/393#issuecomment-662901702
+def json_dumps(obj):
+    return json.dumps(obj, indent=0)
 
 
 DEF_PORT = 18753
@@ -28,7 +20,6 @@ def get_sqlitedict(host, port, db_name, autocommit=False):
     c = rpyc.connect(host, port, config={
             'allow_public_attrs': True,
             'allow_all_attrs': True,
-            'allow_pickle': True,
         })
     return c.root.get_sqlitedict(db_name, autocommit=autocommit)
 
@@ -45,7 +36,7 @@ def start_server(port, db_root):
         def exposed_get_sqlitedict(self, db_name, **kwargs):
             db_path = os.path.join(self.DB_ROOT, db_name + '.sqlite')
             self._instance = SqliteDict(
-                db_path, tablename=db_name, encode=json.dumps,
+                db_path, tablename=db_name, encode=json_dumps,
                 decode=json.loads, **kwargs)
             return self._instance
 
@@ -58,7 +49,6 @@ def start_server(port, db_root):
         protocol_config={
             'allow_public_attrs': True,
             'allow_all_attrs': True,
-            'allow_pickle': True,
         }
     ).start()
 
