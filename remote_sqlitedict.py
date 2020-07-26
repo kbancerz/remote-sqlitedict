@@ -1,10 +1,24 @@
 import json
 import os
+import pickle
 import sys
 
 import rpyc
 from rpyc.utils.server import ThreadedServer
 from sqlitedict import SqliteDict
+
+
+def pickle_dump(obj):
+    return pickle.dumps(obj, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+def pickle_load(data):
+    return pickle.loads(data)
+
+
+# monkey-patch pickle in place of brine
+rpyc.core.brine.dump = pickle_dump
+rpyc.core.brine.load = pickle_load
 
 
 DEF_PORT = 18753
