@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 
 import rpyc
 from rpyc.utils.server import ThreadedServer
@@ -55,5 +56,6 @@ if __name__ == '__main__':
                         help=f'Specify alternate port [default: {DEF_PORT}]')
     args = parser.parse_args()
 
-    print(f'Server starting on port {args.port}...')
+    sys.stdout.write(f'Server starting on port {args.port}...')
+    sys.stdout.flush()
     start_server(args.port, args.directory)
