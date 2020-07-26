@@ -14,6 +14,7 @@ def get_sqlitedict(host, port, db_name, autocommit=False):
     c = rpyc.connect(host, port, config={
             'allow_public_attrs': True,
             'allow_all_attrs': True,
+            'allow_pickle': True,
         })
     return c.root.get_sqlitedict(db_name, autocommit=autocommit)
 
@@ -43,6 +44,7 @@ def start_server(port, db_root):
         protocol_config={
             'allow_public_attrs': True,
             'allow_all_attrs': True,
+            'allow_pickle': True,
         }
     ).start()
 
