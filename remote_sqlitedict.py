@@ -27,7 +27,8 @@ def start_server(port, db_root):
         def exposed_get_sqlitedict(self, db_name, **kwargs):
             db_path = os.path.join(self.DB_ROOT, db_name + '.sqlite')
             self._instance = SqliteDict(
-                db_path, encode=json.dumps, decode=json.loads, **kwargs)
+                db_path, tablename=db_name, encode=json.dumps,
+                decode=json.loads, **kwargs)
             return self._instance
 
         def on_disconnect(self, conn):
