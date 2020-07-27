@@ -18,7 +18,7 @@ DEF_PORT = 18753
 PING_TIMEOUT = 1
 
 
-class RemoteSQLiteDict(object):
+class RemoteSQLiteDictConnector(object):
     def __init__(self, host, port, db_name, autocommit):
         self._host = host
         self._port = port
@@ -52,8 +52,8 @@ class RemoteSQLiteDict(object):
         self._connection = None
 
 
-def get_sqlitedict(host, port, db_name, autocommit=False):
-    return RemoteSQLiteDict(host, port, db_name, autocommit=autocommit)
+def get_sqlitedict_connector(host, port, db_name, autocommit=False):
+    return RemoteSQLiteDictConnector(host, port, db_name, autocommit)
 
 
 def start_server(port, db_root, single_db):
