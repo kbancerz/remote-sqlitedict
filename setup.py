@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages  # noqa: H301
 
 NAME = "remote-sqlitedict"
-VERSION = "0.3.8"
+VERSION = "0.4.0"
 # To install the library, run the following
 #
 # python setup.py install

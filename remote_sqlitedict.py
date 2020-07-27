@@ -24,7 +24,7 @@ def get_sqlitedict(host, port, db_name, autocommit=False):
     return c.root.get_sqlitedict(db_name, autocommit=autocommit)
 
 
-def start_server(port, db_root):
+def start_server(port, db_root, single_db):
     # define new service with DB_ROOT set based on the parameter
     class SQLiteDictService(rpyc.Service):
 
@@ -34,7 +34,11 @@ def start_server(port, db_root):
             self._instance = None
 
         def exposed_get_sqlitedict(self, db_name, **kwargs):
-            db_path = os.path.join(self.DB_ROOT, db_name + '.sqlite')
+            if single_db:
+                db_path = os.path.join(self.DB_ROOT, '_root.sqlite')
+            else:
+                db_path = os.path.join(self.DB_ROOT, db_name + '.sqlite')
+
             self._instance = SqliteDict(
                 db_path, tablename=db_name, encode=json_dumps,
                 decode=json.loads, **kwargs)
@@ -57,6 +61,9 @@ if __name__ == '__main__':
     import argparse
 
     parser = argparse.ArgumentParser()
+    parser.add_argument('--single-db', '-s', action='store_true',
+                        dest='single_db',
+                        help='Save all data in a single database file')
     parser.add_argument('--directory', '-d', default=os.getcwd(),
                         help='Specify alternative directory '
                              '[default:current directory]')
@@ -68,4 +75,4 @@ if __name__ == '__main__':
 
     sys.stdout.write(f'Server starting on port {args.port}...')
     sys.stdout.flush()
-    start_server(args.port, args.directory)
+    start_server(args.port, args.directory, args.single_db)
