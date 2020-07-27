@@ -20,11 +20,11 @@ Also you can use Docker with docker-compose:
  
 ##### Client
 
-To use client just import **get_sqlitedict** function, and call it:
+To use client just import **get_sqlitedict_connector** function, and call it:
 
     from remote_sqlitedict import get_sqlitedict
-    db = get_sqlitedict('localhost', 18753, 'test_database')
-    
-    # use exactly as you would use sqlitedict
-    db['some_object'] = {'field': 'value'}
-    db.commit()
+
+    with get_sqlitedict_connector('localhost', 18753, 'test_database') as db:
+        # use exactly as you would use sqlitedict
+        db['some_object'] = {'field': 'value'}
+        db.commit()
